@@ -96,7 +96,7 @@ def handle_message(event):
     profile = line_bot_api.get_profile(event.source.user_id)
     uid = line_bot_api
     message_text = str(event.message.text).lower()
-    cart = Cart(user_id = event.source.used_id)
+    cart = Cart(user_id = event.source.user_id)
     message = None
 
     ########## 使用說明、選單 ##########
