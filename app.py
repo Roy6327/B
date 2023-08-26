@@ -11,7 +11,9 @@ from linebot.models import (
 )
 from linebot.models import *
 from models.user import Users
-from database import db_session, init_db
+from models.database import db_session, init_db
+
+from models.product import Products
 
 app = Flask(__name__)
 
@@ -94,13 +96,43 @@ def handle_message(event):
     uid = line_bot_api
     message_text = str(event.message.text).lower()
 
-    ### 使用說明、選單 ###
+    ########## 使用說明、選單 ##########
     if message_text == '@使用說明':
         about_us_event(event)
-
-    line_bot_api.reply_message(
-        event.reply_token, TextSendMessage(text='Hi Welcome to LSTORE'))
+    elif message_text =='@我想訂購商品':
+        message = Products.list_all()
+    if messages:
+        line_bot_api.reply_message(
+        event.reply_token,
+        message)
     
+#初始化產品資訊
+@app.before_first_request
+def init_products():
+    # init db
+    result = init_db()#先判斷資料庫有沒有建立，如果還沒建立就會進行下面的動作初始化產品
+    if result:
+        init_data = [Products(name='Lamborghini',
+                              product_image_url='https://i.imgur.com/EYhLvum.jpg',
+                              price=250,
+                              description='nascetur ridiculus mus. Donec quam felis, ultricies'),
+                     Products(name='BMW',
+                              product_image_url='https://i.imgur.com/Pz56QQ9.png',
+                              price=200,
+                              description='adipiscing elit. Aenean commodo ligula eget dolor'),
+                     Products(name='BENZ',
+                              price=200,
+                              product_image_url='https://i.imgur.com/t4zauYW.jpg',
+                              description='Aenean massa. Cum sociis natoque penatibus')]
+        db_session.bulk_save_objects(init_data)#透過這個方法一次儲存list中的產品
+        db_session.commit()#最後commit()才會存進資料庫
+        #記得要from models.product import Products在app.py
+
+if __name__ == "__main__":
+    init_products()
+    app.run()
+
+
 @handler.add(FollowEvent)
 def handle_follow(event):
     welcome_msg = '''Hello! 您好，歡迎成為Hi Car的好友
