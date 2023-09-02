@@ -10,14 +10,11 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,ImageSendMessage,StickerSendMessage,FollowEvent,UnfollowEvent,
 )
 from linebot.models import *
-from database import db_session
+from database import db_session, init_db
 from models.user import Users
 
 from models.product import Products
-from sqlalchemy.sql.expression import text
-from database import db_session, init_db
 
-from models.product import Products
 from models.cart import Cart
 from models.order import Orders
 from models.item import Items
@@ -99,11 +96,10 @@ def callback():
 
     return 'OK'
 
-# 處理訊息
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    #event有什麼資料？詳見補充
-    get_or_create_user(event.source.user_id)
+    profile = line_bot_api.get_profile(event.source.user_id)
+    uid = profile.user_id
     
     message_text = str(event.message.text).lower()
     cart =  Cart(user_id = event.source.user_id)
@@ -146,15 +142,12 @@ def handle_message(event):
             message = cart.display()#就會使用 display()顯示購物車內容
         else:
             message = TextSendMessage(text='Your cart is empty now.')
-    elif message_text == 'empty cart':
-
-        cart.reset()
-
-        message = TextSendMessage(text='Your cart is empty now.')
+    
     if message:
         line_bot_api.reply_message(
         event.reply_token,
         message) 
+
 @handler.add(PostbackEvent)
 def handle_postback(event):
     data = dict(parse_qsl(event.postback.data))#先將postback中的資料轉成字典
