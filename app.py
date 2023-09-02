@@ -110,7 +110,7 @@ def handle_message(event):
     ########## 使用說明、選單 ##########
     if message_text == '@使用說明':
         about_us_event(event)
-    elif message_text =='@我想訂購商品':
+    elif message_text in ['@我想訂購商品', 'add']:
         message = Products.list_all()
     if messages:
         line_bot_api.reply_message(
