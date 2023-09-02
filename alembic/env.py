@@ -6,8 +6,7 @@ from sqlalchemy import pool
 from alembic import context
 import os
 import sys
-sys.path.append(os.getcwd())
-
+sys.path.append(os.getcwd())#才可以抓到專案的路徑
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
