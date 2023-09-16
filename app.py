@@ -61,12 +61,13 @@ def about_us_event(event):
         ]
 
     text_message = TextSendMessage(text='''$ Master RenderP $
-Hello! 您好，歡迎您成為 Master RenderP 的好友！
+Hello! 您好，歡迎您成為 Dream cars 的好友！
 
-我是Master 支付小幫手 
+我是Dream cars小幫手 
 
--這裡有商城，還可以購物喔~
--直接點選下方【圖中】選單功能
+-這裡有商城，歡迎選購~
+
+-請直接點選下方【圖中】選單功能
 
 -期待您的光臨！''', emojis=emoji)
 
@@ -247,17 +248,17 @@ def init_products():
     # init db
     result = init_db()#先判斷資料庫有沒有建立，如果還沒建立就會進行下面的動作初始化產品
     if result:
-        init_data = [Products(name='Lamborghini',
-                              product_image_url='https://i.imgur.com/EYhLvum.jpg',
+        init_data = [Products(name='Black Car',
+                              product_image_url='https://i.imgur.com/fMjDfms.jpg',
                               price=250,
                               description='nascetur ridiculus mus. Donec quam felis, ultricies'),
-                     Products(name='BMW',
-                              product_image_url='https://i.imgur.com/Pz56QQ9.png',
+                     Products(name='Blue Car',
+                              product_image_url='https://i.imgur.com/4aZp1FT.jpg',
                               price=200,
                               description='adipiscing elit. Aenean commodo ligula eget dolor'),
-                     Products(name='BENZ',
+                     Products(name='Red Car',
                               price=200,
-                              product_image_url='https://i.imgur.com/t4zauYW.jpg',
+                              product_image_url='https://i.imgur.com/e6EtcIS.jpg',
                               description='Aenean massa. Cum sociis natoque penatibus')]
         db_session.bulk_save_objects(init_data)#透過這個方法一次儲存list中的產品
         db_session.commit()#最後commit()才會存進資料庫
